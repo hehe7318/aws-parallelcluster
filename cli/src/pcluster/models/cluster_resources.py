@@ -153,9 +153,6 @@ class ClusterStack(StackInfo):
             ClusterCreationFailure("FsxMountFailure", "Failed to mount FSX.", "Failed to mount FSX"),
             ClusterCreationFailure("RaidMountFailure", "Failed to mount RAID array.", "Failed to mount RAID array"),
             ClusterCreationFailure(
-                "HeadNodeBootstrapFailure", "Failed to set up the head node.", "configured scheduler plugin"
-            ),
-            ClusterCreationFailure(
                 "HeadNodeBootstrapFailure", "Failed to set up the head node.", "Failed to run chef recipe"
             ),
             ClusterCreationFailure(
@@ -170,7 +167,7 @@ class ClusterStack(StackInfo):
                 "HeadNodeBootstrapFailure", "Cluster creation timed out.", "WaitCondition timed out"
             ),
             ClusterCreationFailure(
-                "StaticNodeBoostrapFailure",
+                "StaticNodeBootstrapFailure",
                 "Cluster has been set to PROTECTED mode due to failures detected in static node provisioning.",
                 "Cluster has been set to PROTECTED mode due to failures detected in static node provisioning",
             ),

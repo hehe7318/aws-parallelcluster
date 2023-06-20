@@ -261,3 +261,4 @@ DevSettings:
   Timeouts:
     HeadNodeBootstrapTimeout: 1201  # Default 1800 (seconds)
     ComputeNodeBootstrapTimeout: 1001  # Default 1800 (seconds)
+  ComputeStartupTimeMetricEnabled: false
