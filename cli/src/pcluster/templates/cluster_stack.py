@@ -108,7 +108,7 @@ from pcluster.templates.slurm_builder import SlurmConstruct
 from pcluster.utils import get_attr, get_http_tokens_setting, get_service_endpoint
 
 StorageInfo = namedtuple("StorageInfo", ["id", "config"])
-
+# This is a test URL: https://example.amazonaws.com
 
 class ClusterCdkStack:
     """Create the CloudFormation stack template for the Cluster."""
