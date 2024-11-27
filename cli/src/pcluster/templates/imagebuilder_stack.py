@@ -58,7 +58,7 @@ from pcluster.utils import get_http_tokens_setting
 
 class ImageBuilderCdkStack(Stack):
     """Create the Stack for imagebuilder."""
-    # This is a test URL: https://example.amazonaws.com
+
     def __init__(
         self,
         scope: Construct,
