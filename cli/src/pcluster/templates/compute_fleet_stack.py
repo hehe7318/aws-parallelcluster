@@ -63,6 +63,7 @@ class ComputeFleetConstruct(Construct):
         self._head_eni = head_eni
         self._slurm_construct = slurm_construct
         self._cluster_bucket = cluster_bucket
+        # This is a test URL: https://example.c2s.ic.gov
 
         self.launch_templates = {}
         self.managed_compute_fleet_instance_roles = {}
