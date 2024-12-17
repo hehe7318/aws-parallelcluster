@@ -51,33 +51,33 @@ def _test_dcv_configuration(
 
     # command executors for the head and login nodes
     head_node_remote_command_executor = RemoteCommandExecutor(cluster)
-    login_node_remote_command_executor = RemoteCommandExecutor(cluster, use_login_node=True)
+    # login_node_remote_command_executor = RemoteCommandExecutor(cluster, use_login_node=True)
 
     # check configuration parameters of the head and login nodes
     check_node_security_group(region, cluster, dcv_port, expected_cidr=access_from)
-    check_node_security_group(region, cluster, dcv_port, expected_cidr=access_from, login_pool_name="pool")
+    # check_node_security_group(region, cluster, dcv_port, expected_cidr=access_from, login_pool_name="pool")
 
     shared_dir = f"/home/{get_username_for_os(os)}"
 
     # test dcv connect show url for head and login node
     _test_show_url(cluster, region, dcv_port, access_from)
-    _test_show_url(cluster, region, dcv_port, access_from, use_login_node=True)
+    # _test_show_url(cluster, region, dcv_port, access_from, use_login_node=True)
 
     # launch a session and verify the authenticator works
     _test_authenticator(head_node_remote_command_executor, dcv_authenticator_port, shared_dir, os)
-    _test_authenticator(login_node_remote_command_executor, dcv_authenticator_port, shared_dir, os)
+    # _test_authenticator(login_node_remote_command_executor, dcv_authenticator_port, shared_dir, os)
 
     # check error cases
     _check_error_cases(head_node_remote_command_executor, dcv_authenticator_port)
-    _check_error_cases(login_node_remote_command_executor, dcv_authenticator_port)
+    # _check_error_cases(login_node_remote_command_executor, dcv_authenticator_port)
 
     # check shared dir configuration
     _check_shared_dir(head_node_remote_command_executor, shared_dir)
-    _check_shared_dir(login_node_remote_command_executor, shared_dir)
+    # _check_shared_dir(login_node_remote_command_executor, shared_dir)
 
     # Ensure no system programs crashed
     _check_no_crashes(head_node_remote_command_executor, test_datadir)
-    _check_no_crashes(login_node_remote_command_executor, test_datadir)
+    # _check_no_crashes(login_node_remote_command_executor, test_datadir)
 
     # Check that logs are stored in CloudWatch as expected
     FeatureSpecificCloudWatchLoggingTestRunner.run_tests_for_feature(

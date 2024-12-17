@@ -39,12 +39,14 @@ Scheduling:
       Networking:
         SubnetIds:
           - {{ private_subnet_id }}
-      CapacityType: ONDEMAND
+      CapacityType: CAPACITY_BLOCK
       ComputeResources:
         - Name: same-name-diff-queue
-          Instances:
-            - InstanceType: {{ gpu_instance_type }}
-          MaxCount: 5
+          InstanceType: {{ gpu_instance_type }}
+          MinCount: 4
+          MaxCount: 4
+          CapacityReservationTarget:
+            CapacityReservationId: cr-0126390e81fd28658
 SharedStorage:
   - MountDir: /shared  # Test comment
     Name: name1

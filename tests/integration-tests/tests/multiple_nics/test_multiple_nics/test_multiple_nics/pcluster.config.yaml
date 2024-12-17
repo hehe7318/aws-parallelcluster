@@ -2,7 +2,7 @@ Image:
   Os: {{ os }}
 HeadNode:
   # Use multi-NIC instance type from https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-eni.html
-  InstanceType: {{ instance }}
+  InstanceType: c6in.32xlarge
   Networking:
     SubnetId: {{ public_subnet_id }}
     ElasticIp: true
@@ -14,6 +14,12 @@ Scheduling:
   Scheduler: {{ scheduler }}
   {% if scheduler == "awsbatch" %}AwsBatchQueues:{% else %}SlurmQueues:{% endif %}
     - Name: queue-0
+      CapacityType: CAPACITY_BLOCK
+      CapacityReservationTarget:
+        CapacityReservationId: cr-0126390e81fd28658
+      CustomSlurmSettings:
+        Sockets: 2
+        CoresPerSocket: 48
       ComputeResources:
         - Name: compute-resource-0
           {% if scheduler == "awsbatch" %}
@@ -23,8 +29,8 @@ Scheduling:
           {% else %}
           Instances:
             - InstanceType: {{ instance }}
-            - InstanceType: c6in.metal
-          MinCount: 1
+          MinCount: 2
+          MaxCount: 2
           Efa:
             Enabled: true
           {% endif %}

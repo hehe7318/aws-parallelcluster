@@ -1,7 +1,7 @@
 Image:
   Os: {{ os }}
 HeadNode:
-  InstanceType: {{ instance }}
+  InstanceType: c5.xlarge
   Networking:
     SubnetId: {{ private_subnet_id }}
   Ssh:
@@ -13,6 +13,9 @@ Scheduling:
   Scheduler: {{ scheduler }}
   {% if scheduler == "awsbatch" %}AwsBatchQueues:{% else %}SlurmQueues:{% endif %}
     - Name: queue-0
+      CapacityType: CAPACITY_BLOCK
+      CapacityReservationTarget:
+        CapacityReservationId: cr-0126390e81fd28658
       ComputeResources:
         - Name: compute-resource-0
           {% if scheduler == "awsbatch" %}
