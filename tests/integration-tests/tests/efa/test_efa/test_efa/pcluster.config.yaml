@@ -4,7 +4,6 @@ HeadNode:
   InstanceType: {{ head_node_instance }}
   Networking:
     SubnetId: {{ public_subnet_id }}
-    {% if instance == "p4d.24xlarge" %}ElasticIp: true{% endif %}
   Ssh:
     KeyName: {{ key_name }}
   Imds:
@@ -13,30 +12,22 @@ Scheduling:
   Scheduler: {{ scheduler }}
   SlurmQueues:
     - Name: efa-enabled
+      CapacityType: CAPACITY_BLOCK
+      InstanceType: {{ instance }}
       Networking:
         PlacementGroup:
-          Enabled: {% if instance not in ["p4d.24xlarge", "c6gn.16xlarge"] %}true{% else %}false{% endif %}
-          {% if instance == "c5n.18xlarge" %}Name: c5n_capacity_reservation{% endif %}
+          Enabled: false
         SubnetIds:
           - {{ private_subnet_id }}
       ComputeResources:
         - Name: efa-enabled-i1
-          {% if "us-iso" in region %}
-          InstanceType: {{ instance }}
-          {% else %}
-          Instances:
-            - InstanceType: {{ instance }}
-          {% endif %}
           MaxCount: 2
           MinCount: 2
           DisableSimultaneousMultithreading: true
           Efa:
             Enabled: true
-            {% if instance == "p4d.24xlarge" %}GdrSupport: true{% endif %}
-{% if instance == "p4d.24xlarge" %}
           CapacityReservationTarget:
             CapacityReservationResourceGroupArn: arn:aws:resource-groups:us-east-1:447714826191:group/EC2CRGroup
-{% endif %}
 SharedStorage:
   - MountDir: /shared
     Name: name1
