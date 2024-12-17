@@ -13,7 +13,6 @@ Scheduling:
   SlurmQueues:
     - Name: efa-enabled
       CapacityType: CAPACITY_BLOCK
-      InstanceType: {{ instance }}
       Networking:
         PlacementGroup:
           Enabled: false
@@ -21,13 +20,14 @@ Scheduling:
           - {{ private_subnet_id }}
       ComputeResources:
         - Name: efa-enabled-i1
+          InstanceType: {{ instance }}
           MaxCount: 2
           MinCount: 2
           DisableSimultaneousMultithreading: true
           Efa:
             Enabled: true
           CapacityReservationTarget:
-            CapacityReservationResourceGroupArn: arn:aws:resource-groups:us-east-1:447714826191:group/EC2CRGroup
+            CapacityReservationId: cr-0126390e81fd28658
 SharedStorage:
   - MountDir: /shared
     Name: name1
