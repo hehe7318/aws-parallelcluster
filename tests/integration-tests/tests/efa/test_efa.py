@@ -45,7 +45,7 @@ def test_efa(
     Grouped all tests in a single function so that cluster can be reused for all of them.
     """
     if architecture == "x86_64":
-        head_node_instance = "c5.18xlarge"
+        head_node_instance = "c5.12xlarge"
     else:
         head_node_instance = "c6g.16xlarge"
 
@@ -63,7 +63,7 @@ def test_efa(
 
     _test_shm_transfer_is_enabled(scheduler_commands, remote_command_executor, partition="efa-enabled")
 
-    if instance in ["p4d.24xlarge", "p5.48xlarge"]:
+    if instance in ["p4d.24xlarge", "p5.48xlarge", "p5en.48xlarge"]:
         _test_nccl_benchmarks(remote_command_executor, test_datadir, "openmpi", scheduler_commands, instance)
 
     with soft_assertions():
@@ -219,6 +219,7 @@ def _test_nccl_benchmarks(remote_command_executor, test_datadir, mpi_module, sch
         "p4d.24xlarge": 26.0,
         # p5.48xlarge - Expected "in-place busbw" bandwidth with 2 nodes, 8 tasks per node is about 250GB/s
         "p5.48xlarge": 250.0,
+        "p5en.48xlarge": 250.0,
     }
 
     expected_bandwidth = instance_bandwidth_dict.get(instance)
