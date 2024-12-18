@@ -41,8 +41,7 @@ Scheduling:
       CapacityType: CAPACITY_BLOCK
       ComputeResources:
         - Name: same-name-diff-queue
-          Instances:
-            - InstanceType: {{ gpu_instance_type }}
+          InstanceType: {{ gpu_instance_type }}
           MinCount: 2
           MaxCount: 2
           CapacityReservationTarget:
