@@ -18,7 +18,7 @@ Scheduling:
     - Name: queue-0
       CapacityType: CAPACITY_BLOCK
       CapacityReservationTarget:
-        CapacityReservationId: { { capacity_reservation_id } }
+        CapacityReservationId: cr-0126390e81fd28658
       Iam:
         S3Access:
           - BucketName: {{ bucket_name }}
