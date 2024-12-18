@@ -102,13 +102,13 @@ def test_slurm(
         slurm_commands, partition="gpu", instance_type=gpu_instance_type, instance_type_info=gpu_instance_type_info
     )
     _test_cluster_limits(
-        slurm_commands, partition="ondemand", instance_type="c5.xlarge", max_count=4, cpu_per_instance=4
+        slurm_commands, partition="ondemand", instance_type="c5.xlarge", max_count=5, cpu_per_instance=4
     )
     _test_cluster_gpu_limits(
         slurm_commands,
         partition="gpu",
         instance_type=gpu_instance_type,
-        max_count=4,
+        max_count=2,
         gpu_instance_type_info=gpu_instance_type_info,
     )
 

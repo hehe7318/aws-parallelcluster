@@ -43,8 +43,8 @@ Scheduling:
       ComputeResources:
         - Name: same-name-diff-queue
           InstanceType: {{ gpu_instance_type }}
-          MinCount: 4
-          MaxCount: 4
+          MinCount: 2
+          MaxCount: 2
           CapacityReservationTarget:
             CapacityReservationId: cr-0126390e81fd28658
 SharedStorage:
