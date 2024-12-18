@@ -1720,7 +1720,7 @@ def _test_job_dependencies(slurm_commands, region, stack_name, scaledown_idletim
     # Wait for reason to be computed
     time.sleep(3)
     # Job should be in CF and waiting for nodes to power_up
-    assert_that(slurm_commands.get_job_info(job_id)).contains("JobState=RUNNING")
+    assert_that(slurm_commands.get_job_info(job_id)).contains("JobState=CONFIGURING")
     assert_that(slurm_commands.get_job_info(dependent_job_id)).contains("JobState=PENDING Reason=Dependency")
 
     assert_scaling_worked(slurm_commands, region, stack_name, scaledown_idletime, expected_max=10, expected_final=8)
