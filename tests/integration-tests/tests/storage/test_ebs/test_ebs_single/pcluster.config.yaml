@@ -19,17 +19,9 @@ Scheduling:
         CapacityReservationId: cr-0126390e81fd28658
       ComputeResources:
         - Name: compute-resource-0
-          {% if scheduler == "awsbatch" %}
-          InstanceTypes:
-            - {{ instance }}
-          MinvCpus: 4
-          DesiredvCpus: 4
-          {% else %}
-          Instances:
-            - InstanceType: {{ instance }}
+          InstanceType: {{ instance }}
           MinCount: 2
           MaxCount: 2
-          {% endif %}
       Networking:
         SubnetIds:
           - {{ private_subnet_id }}
