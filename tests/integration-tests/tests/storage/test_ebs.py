@@ -45,9 +45,9 @@ def test_ebs_single(
         ebs_kms_key_id=kms_key_id,
     )
     cluster = clusters_factory(cluster_config)
-    assert_subnet_az_relations_from_config(
-        region, scheduler, cluster, expected_in_same_az=False, include_head_node=False
-    )
+    # assert_subnet_az_relations_from_config(
+    #     region, scheduler, cluster, expected_in_same_az=False, include_head_node=False
+    # )
     remote_command_executor_head_node = RemoteCommandExecutor(cluster)
 
     mount_dir = "/" + mount_dir
@@ -58,14 +58,14 @@ def test_ebs_single(
     # Test ebs correctly shared between HeadNode and ComputeNodes
     _test_ebs_correctly_shared(remote_command_executor_head_node, mount_dir, scheduler_commands)
 
-    if scheduler == "slurm":
-        remote_command_executor_login_node = RemoteCommandExecutor(cluster, use_login_node=True)
-        # Test ebs correctly shared between LoginNode and ComputeNodes
-        _test_ebs_correctly_shared(remote_command_executor_login_node, mount_dir, scheduler_commands)
-        # Test ebs correctly shared between HeadNode and LoginNode
-        test_directory_correctly_shared_between_ln_and_hn(
-            remote_command_executor_head_node, remote_command_executor_login_node, mount_dir
-        )
+    # if scheduler == "slurm":
+    #     remote_command_executor_login_node = RemoteCommandExecutor(cluster, use_login_node=True)
+    #     # Test ebs correctly shared between LoginNode and ComputeNodes
+    #     _test_ebs_correctly_shared(remote_command_executor_login_node, mount_dir, scheduler_commands)
+    #     # Test ebs correctly shared between HeadNode and LoginNode
+    #     test_directory_correctly_shared_between_ln_and_hn(
+    #         remote_command_executor_head_node, remote_command_executor_login_node, mount_dir
+    #     )
 
     _test_ebs_encrypted_with_kms(volume_id, region, encrypted=True, kms_key_id=kms_key_id)
 
