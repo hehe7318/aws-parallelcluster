@@ -9,7 +9,7 @@ from ..decorators.decorator import RequestResponseDecorator
 
 logger = logging.getLogger("connexion.operations.secure")
 
-DEFAULT_MIMETYPE = 'application/json'
+DEFAULT_MIMETYPE = "application/json"
 
 
 class SecureOperation:
@@ -70,7 +70,7 @@ class SecureOperation:
 
         :rtype: types.FunctionType
         """
-        logger.debug('... Security: %s', self.security, extra=vars(self))
+        logger.debug("... Security: %s", self.security, extra=vars(self))
         if not self.security:
             return self._api.security_handler_factory.security_passthrough
 
@@ -85,9 +85,11 @@ class SecureOperation:
             for scheme_name, required_scopes in security_req.items():
                 security_scheme = self.security_schemes[scheme_name]
 
-                if security_scheme['type'] == 'oauth2':
+                if security_scheme["type"] == "oauth2":
                     if oauth:
-                        logger.warning("... multiple OAuth2 security schemes in AND fashion not supported", extra=vars(self))
+                        logger.warning(
+                            "... multiple OAuth2 security schemes in AND fashion not supported", extra=vars(self)
+                        )
                         break
                     oauth = True
                     token_info_func = self._api.security_handler_factory.get_tokeninfo_func(security_scheme)
@@ -97,10 +99,11 @@ class SecureOperation:
                         break
 
                     sec_req_funcs[scheme_name] = self._api.security_handler_factory.verify_oauth(
-                        token_info_func, scope_validate_func, required_scopes)
+                        token_info_func, scope_validate_func, required_scopes
+                    )
 
                 # Swagger 2.0
-                elif security_scheme['type'] == 'basic':
+                elif security_scheme["type"] == "basic":
                     basic_info_func = self._api.security_handler_factory.get_basicinfo_func(security_scheme)
                     if not basic_info_func:
                         logger.warning("... x-basicInfoFunc missing", extra=vars(self))
@@ -109,16 +112,16 @@ class SecureOperation:
                     sec_req_funcs[scheme_name] = self._api.security_handler_factory.verify_basic(basic_info_func)
 
                 # OpenAPI 3.0.0
-                elif security_scheme['type'] == 'http':
-                    scheme = security_scheme['scheme'].lower()
-                    if scheme == 'basic':
+                elif security_scheme["type"] == "http":
+                    scheme = security_scheme["scheme"].lower()
+                    if scheme == "basic":
                         basic_info_func = self._api.security_handler_factory.get_basicinfo_func(security_scheme)
                         if not basic_info_func:
                             logger.warning("... x-basicInfoFunc missing", extra=vars(self))
                             break
 
                         sec_req_funcs[scheme_name] = self._api.security_handler_factory.verify_basic(basic_info_func)
-                    elif scheme == 'bearer':
+                    elif scheme == "bearer":
                         bearer_info_func = self._api.security_handler_factory.get_bearerinfo_func(security_scheme)
                         if not bearer_info_func:
                             logger.warning("... x-bearerInfoFunc missing", extra=vars(self))
@@ -128,9 +131,9 @@ class SecureOperation:
                         logger.warning("... Unsupported http authorization scheme %s" % scheme, extra=vars(self))
                         break
 
-                elif security_scheme['type'] == 'apiKey':
-                    scheme = security_scheme.get('x-authentication-scheme', '').lower()
-                    if scheme == 'bearer':
+                elif security_scheme["type"] == "apiKey":
+                    scheme = security_scheme.get("x-authentication-scheme", "").lower()
+                    if scheme == "bearer":
                         bearer_info_func = self._api.security_handler_factory.get_bearerinfo_func(security_scheme)
                         if not bearer_info_func:
                             logger.warning("... x-bearerInfoFunc missing", extra=vars(self))
@@ -143,11 +146,13 @@ class SecureOperation:
                             break
 
                         sec_req_funcs[scheme_name] = self._api.security_handler_factory.verify_api_key(
-                            apikey_info_func, security_scheme['in'], security_scheme['name']
+                            apikey_info_func, security_scheme["in"], security_scheme["name"]
                         )
 
                 else:
-                    logger.warning("... Unsupported security scheme type %s" % security_scheme['type'], extra=vars(self))
+                    logger.warning(
+                        "... Unsupported security scheme type %s" % security_scheme["type"], extra=vars(self)
+                    )
                     break
             else:
                 # No break encountered: no missing funcs

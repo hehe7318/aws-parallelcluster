@@ -6,24 +6,36 @@ import logging
 import warnings
 from copy import copy, deepcopy
 
-from ..operations.abstract import AbstractOperation
-
 from ..decorators.uri_parsing import OpenAPIURIParser
+from ..operations.abstract import AbstractOperation
 from ..utils import deep_get, deep_merge, is_null, is_nullable, make_type
 
 logger = logging.getLogger("connexion.operations.openapi3")
 
 
 class OpenAPIOperation(AbstractOperation):
-
     """
     A single API operation on a path.
     """
 
-    def __init__(self, api, method, path, operation, resolver, path_parameters=None,
-                 app_security=None, components=None, validate_responses=False,
-                 strict_validation=False, randomize_endpoint=None, validator_map=None,
-                 pythonic_params=False, uri_parser_class=None, pass_context_arg_name=None):
+    def __init__(
+        self,
+        api,
+        method,
+        path,
+        operation,
+        resolver,
+        path_parameters=None,
+        app_security=None,
+        components=None,
+        validate_responses=False,
+        strict_validation=False,
+        randomize_endpoint=None,
+        validator_map=None,
+        pythonic_params=False,
+        uri_parser_class=None,
+        pass_context_arg_name=None,
+    ):
         """
         This class uses the OperationID identify the module and function that will handle the operation
 
@@ -71,11 +83,11 @@ class OpenAPIOperation(AbstractOperation):
             return self.components.get(oas3_name, {})
 
         # operation overrides globals
-        security_schemes = component_get('securitySchemes')
-        app_security = operation.get('security', app_security)
+        security_schemes = component_get("securitySchemes")
+        app_security = operation.get("security", app_security)
         uri_parser_class = uri_parser_class or OpenAPIURIParser
 
-        self._router_controller = operation.get('x-openapi-router-controller')
+        self._router_controller = operation.get("x-openapi-router-controller")
 
         super().__init__(
             api=api,
@@ -91,42 +103,42 @@ class OpenAPIOperation(AbstractOperation):
             validator_map=validator_map,
             pythonic_params=pythonic_params,
             uri_parser_class=uri_parser_class,
-            pass_context_arg_name=pass_context_arg_name
+            pass_context_arg_name=pass_context_arg_name,
         )
 
         self._definitions_map = {
-            'components': {
-                'schemas': component_get('schemas'),
-                'examples': component_get('examples'),
-                'requestBodies': component_get('requestBodies'),
-                'parameters': component_get('parameters'),
-                'securitySchemes': component_get('securitySchemes'),
-                'responses': component_get('responses'),
-                'headers': component_get('headers'),
+            "components": {
+                "schemas": component_get("schemas"),
+                "examples": component_get("examples"),
+                "requestBodies": component_get("requestBodies"),
+                "parameters": component_get("parameters"),
+                "securitySchemes": component_get("securitySchemes"),
+                "responses": component_get("responses"),
+                "headers": component_get("headers"),
             }
         }
 
-        self._request_body = operation.get('requestBody', {})
+        self._request_body = operation.get("requestBody", {})
 
-        self._parameters = operation.get('parameters', [])
+        self._parameters = operation.get("parameters", [])
         if path_parameters:
             self._parameters += path_parameters
 
-        self._responses = operation.get('responses', {})
+        self._responses = operation.get("responses", {})
 
         # TODO figure out how to support multiple mimetypes
         # NOTE we currently just combine all of the possible mimetypes,
         #      but we need to refactor to support mimetypes by response code
         response_content_types = []
         for _, defn in self._responses.items():
-            response_content_types += defn.get('content', {}).keys()
-        self._produces = response_content_types or ['application/json']
+            response_content_types += defn.get("content", {}).keys()
+        self._produces = response_content_types or ["application/json"]
 
-        request_content = self._request_body.get('content', {})
-        self._consumes = list(request_content.keys()) or ['application/json']
+        request_content = self._request_body.get("content", {})
+        self._consumes = list(request_content.keys()) or ["application/json"]
 
-        logger.debug('consumes: %s' % self.consumes)
-        logger.debug('produces: %s' % self.produces)
+        logger.debug("consumes: %s" % self.consumes)
+        logger.debug("produces: %s" % self.produces)
 
     @classmethod
     def from_spec(cls, spec, api, path, method, resolver, *args, **kwargs):
@@ -140,7 +152,7 @@ class OpenAPIOperation(AbstractOperation):
             app_security=spec.security,
             components=spec.components,
             *args,
-            **kwargs
+            **kwargs,
         )
 
     @property
@@ -161,13 +173,11 @@ class OpenAPIOperation(AbstractOperation):
 
     def with_definitions(self, schema):
         if self.components:
-            schema['schema']['components'] = self.components
+            schema["schema"]["components"] = self.components
         return schema
 
     def response_schema(self, status_code=None, content_type=None):
-        response_definition = self.response_definition(
-            status_code, content_type
-        )
+        response_definition = self.response_definition(status_code, content_type)
         content_definition = response_definition.get("content", response_definition)
         content_definition = content_definition.get(content_type, content_definition)
         if "schema" in content_definition:
@@ -182,12 +192,10 @@ class OpenAPIOperation(AbstractOperation):
         status_code = status_code or sorted(self._responses.keys())[0]
 
         content_type = content_type or self.get_mimetype()
-        examples_path = [str(status_code), 'content', content_type, 'examples']
-        example_path = [str(status_code), 'content', content_type, 'example']
-        schema_example_path = [
-            str(status_code), 'content', content_type, 'schema', 'example'
-        ]
-        schema_path = [str(status_code), 'content', content_type, 'schema']
+        examples_path = [str(status_code), "content", content_type, "examples"]
+        example_path = [str(status_code), "content", content_type, "example"]
+        schema_example_path = [str(status_code), "content", content_type, "schema", "example"]
+        schema_path = [str(status_code), "content", content_type, "schema"]
 
         try:
             status_code = int(status_code)
@@ -195,10 +203,7 @@ class OpenAPIOperation(AbstractOperation):
             status_code = 200
         try:
             # TODO also use example header?
-            return (
-                list(deep_get(self._responses, examples_path).values())[0]['value'],
-                status_code
-            )
+            return (list(deep_get(self._responses, examples_path).values())[0]["value"], status_code)
         except (KeyError, IndexError):
             pass
         try:
@@ -206,14 +211,12 @@ class OpenAPIOperation(AbstractOperation):
         except KeyError:
             pass
         try:
-            return (deep_get(self._responses, schema_example_path),
-                    status_code)
+            return (deep_get(self._responses, schema_example_path), status_code)
         except KeyError:
             pass
 
         try:
-            return (self._nested_example(deep_get(self._responses, schema_path)),
-                    status_code)
+            return (self._nested_example(deep_get(self._responses, schema_path)), status_code)
         except KeyError:
             return (None, status_code)
 
@@ -224,8 +227,7 @@ class OpenAPIOperation(AbstractOperation):
             pass
         try:
             # Recurse if schema is an object
-            return {key: self._nested_example(value)
-                    for (key, value) in schema["properties"].items()}
+            return {key: self._nested_example(value) for (key, value) in schema["properties"].items()}
         except KeyError:
             pass
         try:
@@ -239,12 +241,12 @@ class OpenAPIOperation(AbstractOperation):
         path_parameters = (p for p in self.parameters if p["in"] == "path")
         for path_defn in path_parameters:
             path_schema = path_defn["schema"]
-            if path_schema.get('type') == 'string' and path_schema.get('format') == 'path':
+            if path_schema.get("type") == "string" and path_schema.get("format") == "path":
                 # path is special case for type 'string'
-                path_type = 'path'
+                path_type = "path"
             else:
-                path_type = path_schema.get('type')
-            types[path_defn['name']] = path_type
+                path_type = path_schema.get("type")
+            types[path_defn["name"]] = path_type
         return types
 
     @property
@@ -252,7 +254,7 @@ class OpenAPIOperation(AbstractOperation):
         """
         The body schema definition for this operation.
         """
-        return self.body_definition.get('schema', {})
+        return self.body_definition.get("schema", {})
 
     @property
     def body_definition(self):
@@ -265,10 +267,8 @@ class OpenAPIOperation(AbstractOperation):
         """
         if self._request_body:
             if len(self.consumes) > 1:
-                logger.warning(
-                    'this operation accepts multiple content types, using %s',
-                    self.consumes[0])
-            res = self._request_body.get('content', {}).get(self.consumes[0], {})
+                logger.warning("this operation accepts multiple content types, using %s", self.consumes[0])
+            res = self._request_body.get("content", {}).get(self.consumes[0], {})
             return self.with_definitions(res)
         return {}
 
@@ -277,14 +277,17 @@ class OpenAPIOperation(AbstractOperation):
             return {}
 
         # prefer the x-body-name as an extension of requestBody
-        x_body_name = sanitize(self.request_body.get('x-body-name', None))
+        x_body_name = sanitize(self.request_body.get("x-body-name", None))
 
         if not x_body_name:
             # x-body-name also accepted in the schema field for legacy connexion compat
-            warnings.warn('x-body-name within the requestBody schema will be deprecated in the '
-                          'next major version. It should be provided directly under '
-                          'the requestBody instead.', DeprecationWarning)
-            x_body_name = sanitize(self.body_schema.get('x-body-name', 'body'))
+            warnings.warn(
+                "x-body-name within the requestBody schema will be deprecated in the "
+                "next major version. It should be provided directly under "
+                "the requestBody instead.",
+                DeprecationWarning,
+            )
+            x_body_name = sanitize(self.body_schema.get("x-body-name", "body"))
 
         # if the body came in null, and the schema says it can be null, we decide
         # to include no value for the body argument, rather than the default body
@@ -294,9 +297,8 @@ class OpenAPIOperation(AbstractOperation):
             return {}
 
         # now determine the actual value for the body (whether it came in or is default)
-        default_body = self.body_schema.get('default', {})
-        body_props = {k: {"schema": v} for k, v
-                      in self.body_schema.get("properties", {}).items()}
+        default_body = self.body_schema.get("default", {})
+        body_props = {k: {"schema": v} for k, v in self.body_schema.get("properties", {}).items()}
 
         # by OpenAPI specification `additionalProperties` defaults to `true`
         # see: https://github.com/OAI/OpenAPI-Specification/blame/3.0.2/versions/3.0.2.md#L2305
@@ -352,14 +354,13 @@ class OpenAPIOperation(AbstractOperation):
         return res
 
     def _build_default_obj_recursive(self, _properties, res):
-        """ takes disparate and nested default keys, and builds up a default object
-        """
+        """takes disparate and nested default keys, and builds up a default object"""
         for key, prop in _properties.items():
-            if 'default' in prop and key not in res:
-                res[key] = copy(prop['default'])
-            elif prop.get('type') == 'object' and 'properties' in prop:
+            if "default" in prop and key not in res:
+                res[key] = copy(prop["default"])
+            elif prop.get("type") == "object" and "properties" in prop:
                 res.setdefault(key, {})
-                res[key] = self._build_default_obj_recursive(prop['properties'], res[key])
+                res[key] = self._build_default_obj_recursive(prop["properties"], res[key])
         return res
 
     def _get_default_obj(self, schema):
@@ -382,15 +383,12 @@ class OpenAPIOperation(AbstractOperation):
         return defaults
 
     def _get_query_arguments(self, query, arguments, has_kwargs, sanitize):
-        query_defns = {p["name"]: p
-                       for p in self.parameters
-                       if p["in"] == "query"}
+        query_defns = {p["name"]: p for p in self.parameters if p["in"] == "query"}
         default_query_params = self._get_query_defaults(query_defns)
 
         query_arguments = deepcopy(default_query_params)
         query_arguments = deep_merge(query_arguments, query)
-        return self._query_args_helper(query_defns, query_arguments,
-                                       arguments, has_kwargs, sanitize)
+        return self._query_args_helper(query_defns, query_arguments, arguments, has_kwargs, sanitize)
 
     def _get_val_from_param(self, value, query_defn):
         query_schema = query_defn["schema"]

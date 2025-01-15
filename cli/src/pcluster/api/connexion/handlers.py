@@ -7,7 +7,7 @@ import logging
 from .exceptions import AuthenticationProblem, ResolverProblem
 from .operations.secure import SecureOperation
 
-logger = logging.getLogger('connexion.handlers')
+logger = logging.getLogger("connexion.handlers")
 
 RESOLVER_ERROR_ENDPOINT_RANDOM_DIGITS = 6
 
@@ -39,7 +39,7 @@ class AuthErrorHandler(SecureOperation):
         Configured error auth handler.
         """
         security_decorator = self.security_decorator
-        logger.debug('... Adding security decorator (%r)', security_decorator, extra=vars(self))
+        logger.debug("... Adding security decorator (%r)", security_decorator, extra=vars(self))
         function = self.handle
         function = security_decorator(function)
         function = self._request_response_decorator(function)
@@ -50,9 +50,7 @@ class AuthErrorHandler(SecureOperation):
         Actual handler for the execution after authentication.
         """
         raise AuthenticationProblem(
-            title=self.exception.name,
-            detail=self.exception.description,
-            status=self.exception.code
+            title=self.exception.name, detail=self.exception.description, status=self.exception.code
         )
 
 
@@ -71,11 +69,7 @@ class ResolverErrorHandler(SecureOperation):
         return self.handle
 
     def handle(self, *args, **kwargs):
-        raise ResolverProblem(
-            title='Not Implemented',
-            detail=self.exception.reason,
-            status=self.status_code
-        )
+        raise ResolverProblem(title="Not Implemented", detail=self.exception.reason, status=self.status_code)
 
     @property
     def operation_id(self):

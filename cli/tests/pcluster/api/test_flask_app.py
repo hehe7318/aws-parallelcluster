@@ -9,9 +9,9 @@ import logging
 
 import pytest
 from assertpy import assert_that
-from connexion.exceptions import BadRequestProblem
 from werkzeug.exceptions import InternalServerError, MethodNotAllowed
 
+from pcluster.api.connexion.exceptions import BadRequestProblem
 from pcluster.api.errors import BadRequestException, InternalServiceException
 from pcluster.api.flask_app import ParallelClusterFlaskApp
 from pcluster.aws.common import AWSClientError

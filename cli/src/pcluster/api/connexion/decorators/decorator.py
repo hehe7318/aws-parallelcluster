@@ -9,7 +9,7 @@ import logging
 
 from ..utils import has_coroutine
 
-logger = logging.getLogger('connexion.decorators.decorator')
+logger = logging.getLogger("connexion.decorators.decorator")
 
 
 class BaseDecorator:
@@ -25,7 +25,7 @@ class BaseDecorator:
         """
         :rtype: str
         """
-        return '<BaseDecorator>'
+        return "<BaseDecorator>"
 
 
 class RequestResponseDecorator(BaseDecorator):
@@ -44,6 +44,7 @@ class RequestResponseDecorator(BaseDecorator):
         :rtype: types.FunctionType
         """
         if has_coroutine(function, self.api):
+
             @functools.wraps(function)
             async def wrapper(*args, **kwargs):
                 connexion_request = self.api.get_request(*args, **kwargs)
@@ -54,14 +55,14 @@ class RequestResponseDecorator(BaseDecorator):
                 while asyncio.iscoroutine(connexion_response):
                     connexion_response = await connexion_response
 
-                framework_response = self.api.get_response(connexion_response, self.mimetype,
-                                                           connexion_request)
+                framework_response = self.api.get_response(connexion_response, self.mimetype, connexion_request)
                 while asyncio.iscoroutine(framework_response):
                     framework_response = await framework_response
 
                 return framework_response
 
         else:  # pragma: no cover
+
             @functools.wraps(function)
             def wrapper(*args, **kwargs):
                 request = self.api.get_request(*args, **kwargs)
