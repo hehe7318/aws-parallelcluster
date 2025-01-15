@@ -9,9 +9,9 @@ import logging
 
 import pytest
 from assertpy import assert_that
-from connexion.exceptions import BadRequestProblem
 from werkzeug.exceptions import InternalServerError, MethodNotAllowed
 
+from pcluster.api.connexion.exceptions import BadRequestProblem
 from pcluster.api.errors import BadRequestException, InternalServiceException
 from pcluster.api.flask_app import ParallelClusterFlaskApp
 from pcluster.aws.common import AWSClientError
@@ -71,7 +71,7 @@ class TestParallelClusterFlaskApp:
             response,
             body={
                 "message": "The server encountered an internal error and was unable to complete your request. "
-                "Either the server is overloaded or there is an error in the application."
+                           "Either the server is overloaded or there is an error in the application."
             },
             code=500,
         )
@@ -113,7 +113,7 @@ class TestParallelClusterFlaskApp:
             response,
             body={
                 "message": "Unexpected fatal exception. Please look at the application logs for details on the "
-                "encountered failure."
+                           "encountered failure."
             },
             code=500,
         )
@@ -137,31 +137,31 @@ class TestParallelClusterFlaskApp:
         "error, expected_status, expected_response",
         [
             (
-                AWSClientError(
-                    "function_name", "Testing validation error", AWSClientError.ErrorCode.VALIDATION_ERROR.value
-                ),
-                400,
-                {"message": "Bad Request: Testing validation error"},
+                    AWSClientError(
+                        "function_name", "Testing validation error", AWSClientError.ErrorCode.VALIDATION_ERROR.value
+                    ),
+                    400,
+                    {"message": "Bad Request: Testing validation error"},
             ),
             (
-                AWSClientError(
-                    "function_name",
-                    "Testing throttling error",
-                    AWSClientError.ErrorCode.THROTTLING_EXCEPTION.value,
-                ),
-                429,
-                {"message": "Testing throttling error"},
+                    AWSClientError(
+                        "function_name",
+                        "Testing throttling error",
+                        AWSClientError.ErrorCode.THROTTLING_EXCEPTION.value,
+                    ),
+                    429,
+                    {"message": "Testing throttling error"},
             ),
             (
-                AWSClientError("function_name", "Testing unexpected error", None),
-                500,
-                {"message": "Failed when calling AWS service in function_name: Testing unexpected error"},
+                    AWSClientError("function_name", "Testing unexpected error", None),
+                    500,
+                    {"message": "Failed when calling AWS service in function_name: Testing unexpected error"},
             ),
         ],
         ids=["validation", "throttling", "unexpected"],
     )
     def test_handle_aws_client_error(
-        self, caplog, flask_app_with_error_route, error, expected_status, expected_response
+            self, caplog, flask_app_with_error_route, error, expected_status, expected_response
     ):
         with flask_app_with_error_route(error).test_client() as client:
             response = client.get("/error")

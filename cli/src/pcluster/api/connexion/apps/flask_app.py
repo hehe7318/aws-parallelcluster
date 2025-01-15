@@ -34,7 +34,7 @@ class FlaskApp(AbstractApp):
 
     def create_app(self):
         app = flask.Flask(self.import_name, **self.server_args)
-        app.json = FlaskJSONEncoder
+        app.json_encoder = FlaskJSONEncoder
         app.url_map.converters['float'] = NumberConverter
         app.url_map.converters['int'] = IntegerConverter
         return app
