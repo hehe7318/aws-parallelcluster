@@ -9,7 +9,7 @@ import logging
 
 import pytest
 from assertpy import assert_that
-from connexion.exceptions import BadRequestProblem
+from pcluster.api.connexion.exceptions import BadRequestProblem
 from werkzeug.exceptions import InternalServerError, MethodNotAllowed
 
 from pcluster.api.errors import BadRequestException, InternalServiceException
