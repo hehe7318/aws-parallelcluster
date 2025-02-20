@@ -13,13 +13,13 @@ from flask.globals import request_ctx
 import werkzeug.exceptions
 from werkzeug.local import LocalProxy
 
-from connexion.apis import flask_utils
-from connexion.apis.abstract import AbstractAPI
-from connexion.handlers import AuthErrorHandler
-from connexion.jsonifier import Jsonifier
-from connexion.lifecycle import ConnexionRequest, ConnexionResponse
-from connexion.security import FlaskSecurityHandlerFactory
-from connexion.utils import is_json_mimetype, yamldumper
+from pcluster.api.connexion.apis import flask_utils
+from pcluster.api.connexion.apis.abstract import AbstractAPI
+from pcluster.api.connexion.handlers import AuthErrorHandler
+from pcluster.api.connexion.jsonifier import Jsonifier
+from pcluster.api.connexion.lifecycle import ConnexionRequest, ConnexionResponse
+from pcluster.api.connexion.security import FlaskSecurityHandlerFactory
+from pcluster.api.connexion.utils import is_json_mimetype, yamldumper
 
 logger = logging.getLogger('connexion.apis.flask_api')
 

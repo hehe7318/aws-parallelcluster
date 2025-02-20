@@ -10,8 +10,8 @@ from os import path
 import click
 from clickclick import AliasedGroup, fatal_error
 
-import connexion
-from connexion.mock import MockResolver
+import pcluster.api.connexion
+from pcluster.api.connexion.mock import MockResolver
 
 logger = logging.getLogger('connexion.cli')
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])

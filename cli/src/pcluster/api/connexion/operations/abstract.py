@@ -6,7 +6,7 @@ and functionality shared between Swagger 2 and OpenAPI 3 specifications.
 import abc
 import logging
 
-from connexion.operations.secure import SecureOperation
+from pcluster.api.connexion.operations.secure import SecureOperation
 
 from ..decorators.metrics import UWSGIMetricsCollector
 from ..decorators.parameter import parameter_to_arg

@@ -10,7 +10,7 @@ try:
 except ImportError:
     default_template_dir = None
 
-from connexion.decorators.uri_parsing import AbstractURIParser
+from pcluster.api.connexion.decorators.uri_parsing import AbstractURIParser
 
 NO_UI_MSG = """The swagger_ui directory could not be found.
     Please install connexion with extra install: pip install connexion[swagger-ui]

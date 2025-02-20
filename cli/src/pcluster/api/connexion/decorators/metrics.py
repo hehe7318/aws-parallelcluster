@@ -9,7 +9,7 @@ import time
 
 from werkzeug.exceptions import HTTPException
 
-from connexion.exceptions import ProblemException
+from pcluster.api.connexion.exceptions import ProblemException
 
 try:
     import uwsgi_metrics

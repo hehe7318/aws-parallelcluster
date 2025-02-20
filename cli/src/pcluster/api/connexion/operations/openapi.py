@@ -6,7 +6,7 @@ import logging
 import warnings
 from copy import copy, deepcopy
 
-from connexion.operations.abstract import AbstractOperation
+from pcluster.api.connexion.operations.abstract import AbstractOperation
 
 from ..decorators.uri_parsing import OpenAPIURIParser
 from ..http_facts import FORM_CONTENT_TYPES

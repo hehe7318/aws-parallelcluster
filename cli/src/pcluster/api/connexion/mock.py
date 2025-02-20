@@ -5,7 +5,7 @@ This module contains a mock resolver that returns mock functions for operations 
 import functools
 import logging
 
-from connexion.resolver import Resolution, Resolver, ResolverError
+from pcluster.api.connexion.resolver import Resolution, Resolver, ResolverError
 
 logger = logging.getLogger(__name__)
 

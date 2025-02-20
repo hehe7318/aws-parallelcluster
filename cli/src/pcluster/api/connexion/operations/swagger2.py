@@ -5,7 +5,7 @@ This module defines a Swagger2Operation class, a Connexion operation specific fo
 import logging
 from copy import deepcopy
 
-from connexion.operations.abstract import AbstractOperation
+from pcluster.api.connexion.operations.abstract import AbstractOperation
 
 from ..decorators.uri_parsing import Swagger2URIParser
 from ..exceptions import InvalidSpecification

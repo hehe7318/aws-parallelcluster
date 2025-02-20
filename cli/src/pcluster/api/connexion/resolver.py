@@ -9,8 +9,8 @@ import sys
 
 from inflection import camelize
 
-import connexion.utils as utils
-from connexion.exceptions import ResolverError
+import pcluster.api.connexion.utils as utils
+from pcluster.api.connexion.exceptions import ResolverError
 
 logger = logging.getLogger('connexion.resolver')
 

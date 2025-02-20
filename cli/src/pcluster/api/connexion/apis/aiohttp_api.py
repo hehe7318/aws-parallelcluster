@@ -18,14 +18,14 @@ from aiohttp.web_exceptions import HTTPNotFound, HTTPPermanentRedirect
 from aiohttp.web_middlewares import normalize_path_middleware
 from werkzeug.exceptions import HTTPException as werkzeug_HTTPException
 
-from connexion.apis.abstract import AbstractAPI
-from connexion.exceptions import ProblemException
-from connexion.handlers import AuthErrorHandler
-from connexion.jsonifier import JSONEncoder, Jsonifier
-from connexion.lifecycle import ConnexionRequest, ConnexionResponse
-from connexion.problem import problem
-from connexion.security import AioHttpSecurityHandlerFactory
-from connexion.utils import yamldumper
+from pcluster.api.connexion.apis.abstract import AbstractAPI
+from pcluster.api.connexion.exceptions import ProblemException
+from pcluster.api.connexion.handlers import AuthErrorHandler
+from pcluster.api.connexion.jsonifier import JSONEncoder, Jsonifier
+from pcluster.api.connexion.lifecycle import ConnexionRequest, ConnexionResponse
+from pcluster.api.connexion.problem import problem
+from pcluster.api.connexion.security import AioHttpSecurityHandlerFactory
+from pcluster.api.connexion.utils import yamldumper
 
 logger = logging.getLogger('connexion.apis.aiohttp_api')
 
