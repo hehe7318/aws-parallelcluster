@@ -29,10 +29,10 @@ Scheduling:
       ComputeResources:
         - Name: ondemand-i1
           Instances:
-            - InstanceType: c5.large
+            - InstanceType: c6i.large
         - Name: same-name-diff-queue
           Instances:
-            - InstanceType: c5.xlarge
+            - InstanceType: c6i.xlarge
           MinCount: 1
           MaxCount: 5
     - Name: gpu

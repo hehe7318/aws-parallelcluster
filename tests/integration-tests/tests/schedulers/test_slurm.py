@@ -76,7 +76,7 @@ def test_slurm(
     Grouped all tests in a single function so that cluster can be reused for all of them.
     """
     scaledown_idletime = 3
-    gpu_instance_type = "g4dn.2xlarge"
+    gpu_instance_type = "g6.2xlarge"
     gpu_instance_type_info = get_instance_info(gpu_instance_type, region)
     # For OSs running _test_mpi_job_termination, spin up 2 compute nodes at cluster creation to run test
     # Else do not spin up compute node and start running regular slurm tests
@@ -104,14 +104,14 @@ def test_slurm(
         cluster.cfn_name,
         scaledown_idletime,
         partition="ondemand",
-        instance_type="c5.xlarge",
+        instance_type="c6i.xlarge",
         cpu_per_instance=4,
     )
     _gpu_resource_check(
         slurm_commands, partition="gpu", instance_type=gpu_instance_type, instance_type_info=gpu_instance_type_info
     )
     _test_cluster_limits(
-        slurm_commands, partition="ondemand", instance_type="c5.xlarge", max_count=5, cpu_per_instance=4
+        slurm_commands, partition="ondemand", instance_type="c6i.xlarge", max_count=5, cpu_per_instance=4
     )
     _test_cluster_gpu_limits(
         slurm_commands,
@@ -1963,7 +1963,7 @@ def _test_active_job_running(scheduler_commands, remote_command_executor, runnin
             "command": "sleep 3000",
             "nodes": 1,
             "partition": running_partition,
-            "constraint": "c5.xlarge",
+            "constraint": "c6i.xlarge",
         }
     )
     # Wait for the job to run
@@ -1975,7 +1975,7 @@ def _test_active_job_running(scheduler_commands, remote_command_executor, runnin
             "command": "sleep 60",
             "nodes": 2,
             "partition": failing_partition,
-            "constraint": "c5.large",
+            "constraint": "c6i.large",
         }
     )
     # Check the threshold reach but partition will be still UP since there's active job running
@@ -2117,7 +2117,7 @@ def _test_compute_node_bootstrap_timeout(
         submit_command_args={
             "command": "sleep 1",
             "partition": "ondemand",
-            "constraint": "c5.xlarge",
+            "constraint": "c6i.xlarge",
             "nodes": 2,
         }
     )
