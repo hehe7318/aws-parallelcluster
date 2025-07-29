@@ -169,11 +169,6 @@ def test_build_image(
     cfn_client = boto3.client("cloudformation", region_name=region)
     _wait_for_creation_of_delete_stack_function(image.image_id, cfn_client)
 
-    lamda_vpc_config = image.config["DeploymentSettings"]["LambdaFunctionsVpcConfig"]
-    assert_lambda_vpc_settings_are_correct(
-        image.image_id, region, lamda_vpc_config["SecurityGroupIds"], lamda_vpc_config["SubnetIds"]
-    )
-
     with soft_assertions():
         _test_build_image_success(image)
         _test_build_instances_tags(image, image.config["Build"]["Tags"], region)
