@@ -11,6 +11,8 @@ Build:
         InstanceRole: {{ instance_role }}
     InstanceType: {{ instance }}
     ParentImage: {{ parent_image }}
+    SecurityGroupIds:
+        - {{ default_vpc_security_group_id }}
     SubnetId: {{ public_subnet_id }}
     Tags:
         - Key: dummyBuildTag
@@ -23,3 +25,5 @@ Build:
             Enabled: {{ enable_lustre_client }}
         NvidiaSoftware:
             Enabled: {{ enable_nvidia }}
+
+CustomS3Bucket: {{ bucket_name }}
