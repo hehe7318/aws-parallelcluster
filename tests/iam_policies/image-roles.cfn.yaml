@@ -106,11 +106,25 @@ Resources:
           PolicyDocument:
             Version: '2012-10-17'
             Statement:
-              - Action:
+              - Sid: IAMPassRole
+                Action:
                   - ec2:CreateTags
                   - ec2:ModifyImageAttribute
                 Resource: !Sub 'arn:${AWS::Partition}:ec2:${AWS::Region}::image/*'
                 Effect: Allow
+              - Sid: IAMPassRole
+                Effect: Allow
+                Action:
+                  - iam:PassRole
+                Resource:
+                  - !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:instance-profile/${CustomIamPathPrefix}/*'
+                  - !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:role/${CustomIamPathPrefix}/*'
+                Condition:
+                  StringEquals:
+                    iam:PassedToService:
+                      - lambda.amazonaws.com
+                      - ec2.amazonaws.com
+                      - ec2.amazonaws.com.cn
 
 Outputs:
   BuildImageLambdaCleanupRole:
