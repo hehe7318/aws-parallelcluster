@@ -27,3 +27,10 @@ Build:
             Enabled: {{ enable_nvidia }}
 
 CustomS3Bucket: {{ bucket_name }}
+
+DeploymentSettings:
+    LambdaFunctionsVpcConfig:
+        SubnetIds:
+            - {{ private_subnet_id }}
+        SecurityGroupIds:
+            - {{ default_vpc_security_group_id }}
