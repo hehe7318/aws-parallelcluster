@@ -31,6 +31,6 @@ CustomS3Bucket: {{ bucket_name }}
 DeploymentSettings:
     LambdaFunctionsVpcConfig:
         SubnetIds:
-            - {{ private_subnet_id }}
+        - {{ private_subnet_id }}
         SecurityGroupIds:
-            - {{ default_vpc_security_group_id }}
+        - {{ default_vpc_security_group_id }}

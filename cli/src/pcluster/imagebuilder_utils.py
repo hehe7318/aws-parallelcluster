@@ -218,15 +218,15 @@ def ensure_default_build_image_stack_cleanup_role(
         else:
             raise
 
+    if already_bootstrapped:
+        return role_arn
+
     # Attach AWSLambdaVPCAccessExecutionRole
     if attach_vpc_access_policy:
         iam.attach_role_policy(
             role_name,
             f"arn:{partition}:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole",
         )
-
-    if already_bootstrapped:
-        return role_arn
 
     # Attach AWSLambdaBasicExecutionRole
     cleanup_role_basic_managed_policy = f"arn:{partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
