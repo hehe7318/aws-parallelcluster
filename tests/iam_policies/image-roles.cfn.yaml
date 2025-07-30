@@ -106,7 +106,7 @@ Resources:
           PolicyDocument:
             Version: '2012-10-17'
             Statement:
-              - Sid: IAMPassRole
+              - Sid: IAMCreateTags
                 Action:
                   - ec2:CreateTags
                   - ec2:ModifyImageAttribute
