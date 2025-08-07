@@ -11,6 +11,7 @@
 import json
 import logging
 import os
+from time import sleep
 
 import yaml
 
@@ -196,6 +197,8 @@ def ensure_default_build_image_stack_cleanup_role(
         ],
     }
     # Check whether the role already exists
+    resp_delete_role = iam.delete_role(role_name=role_name)
+    sleep(30)
     try:
         resp = iam.get_role(role_name=role_name)
         tags = {t["Key"]: t["Value"] for t in resp["Role"].get("Tags", [])}

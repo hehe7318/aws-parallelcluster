@@ -29,6 +29,11 @@ class IamClient(Boto3Client):
         return self._client.get_role(RoleName=role_name)
 
     @AWSExceptionHandler.handle_client_exception
+    def delete_role(self, role_name):
+        """Get role information."""
+        return self._client.delete_role(RoleName=role_name)
+
+    @AWSExceptionHandler.handle_client_exception
     def get_instance_profile(self, instance_profile_name):
         """Get instance profile information."""
         return self._client.get_instance_profile(InstanceProfileName=instance_profile_name)
