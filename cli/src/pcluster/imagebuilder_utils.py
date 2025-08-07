@@ -196,9 +196,24 @@ def ensure_default_build_image_stack_cleanup_role(
             }
         ],
     }
-    # Check whether the role already exists
-    resp_delete_role = iam.delete_role(role_name=role_name)
-    sleep(30)
+    # Check whether the role already exists and delete it if it exists
+    try:
+        # First, detach all managed policies
+        attached_policies = iam.list_attached_role_policies(role_name=role_name)
+        for policy in attached_policies.get('AttachedPolicies', []):
+            iam.detach_role_policy(role_name=role_name, policy_arn=policy['PolicyArn'])
+        
+        # Then, delete all inline policies
+        inline_policies = iam.list_role_policies(role_name=role_name)
+        for policy_name in inline_policies.get('PolicyNames', []):
+            iam.delete_role_policy(role_name=role_name, policy_name=policy_name)
+        
+        # Finally, delete the role
+        iam.delete_role(role_name=role_name)
+        sleep(30)
+    except AWSClientError as e:
+        if e.error_code != "NoSuchEntity":
+            raise
     try:
         resp = iam.get_role(role_name=role_name)
         tags = {t["Key"]: t["Value"] for t in resp["Role"].get("Tags", [])}
