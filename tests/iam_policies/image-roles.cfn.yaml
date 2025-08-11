@@ -111,6 +111,19 @@ Resources:
                   - ec2:ModifyImageAttribute
                 Resource: !Sub 'arn:${AWS::Partition}:ec2:${AWS::Region}::image/*'
                 Effect: Allow
+              - Action:
+                  - iam:ListAttachedRolePolicies
+                  - iam:DetachRolePolicy
+                  - iam:ListRolePolicies
+                  - iam:DeleteRolePolicy
+                  - iam:DeleteRole
+                  - iam:GetRole
+                  - iam:CreateRole
+                  - iam:AttachRolePolicy
+                  - iam:PutRolePolicy
+                  - iam:TagRole
+                Resource: !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:role/parallelcluster/*'
+                Effect: Allow
 
 Outputs:
   BuildImageLambdaCleanupRole:

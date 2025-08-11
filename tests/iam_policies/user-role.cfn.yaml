@@ -544,6 +544,15 @@ Resources:
               - iam:GetRole
               - iam:GetRolePolicy
               - iam:GetInstanceProfile
+              - iam:ListAttachedRolePolicies
+              - iam:DetachRolePolicy
+              - iam:ListRolePolicies
+              - iam:DeleteRolePolicy
+              - iam:DeleteRole
+              - iam:CreateRole
+              - iam:AttachRolePolicy
+              - iam:PutRolePolicy
+              - iam:TagRole
             Resource:
               - !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:instance-profile/${CustomIamPathPrefix}/*'
               - !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:instance-profile/ParallelClusterImage*'
