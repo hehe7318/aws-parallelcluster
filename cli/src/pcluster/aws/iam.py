@@ -64,6 +64,16 @@ class IamClient(Boto3Client):
         return self._client.list_attached_role_policies(RoleName=role_name)
 
     @AWSExceptionHandler.handle_client_exception
+    def list_role_policies(self, role_name):
+        """Add or overwrite one or more tags for the specified role."""
+        return self._client.list_role_policies(RoleName=role_name)
+
+    @AWSExceptionHandler.handle_client_exception
     def detach_role_policy(self, role_name, policy_arn):
         """Add or overwrite one or more tags for the specified role."""
         return self._client.detach_role_policy(RoleName=role_name, PolicyArn=policy_arn)
+
+    @AWSExceptionHandler.handle_client_exception
+    def delete_role_policy(self, role_name, policy_name):
+        """Add or overwrite one or more tags for the specified role."""
+        return self._client.delete_role_policy(RoleName=role_name, PolicyName=policy_name)
