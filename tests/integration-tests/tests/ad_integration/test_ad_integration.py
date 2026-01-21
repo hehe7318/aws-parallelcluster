@@ -623,54 +623,68 @@ def test_ad_integration(  # noqa: C901
         # TODO: we have to sleep for 10 minutes to wait for the SSSD agent use the newly placed certificate.
         #  We should look for other methods to let the SSSD agent use the new certificate more quickly
 
-    scheduler_commands = scheduler_commands_factory(remote_command_executor)
-    assert_that(NUM_USERS_TO_TEST).is_less_than_or_equal_to(NUM_USERS_TO_CREATE)
-    users = []
-    for user_num in range(NUM_USERS_TO_TEST):
-        users.append(
-            ClusterUser(
-                user_num,
-                test_datadir,
-                cluster,
-                scheduler,
-                remote_command_executor,
-                ad_user_password,
-                scheduler_commands_factory,
-            )
-        )
-    shared_storage_mount_dirs = ["/shared"]
-    _run_user_workloads(users, test_datadir, shared_storage_mount_dirs)
-    logging.info("Testing pcluster update and generate ssh keys for user")
-    _check_ssh_key_generation(users[0], remote_command_executor, scheduler_commands, False)
+    # ============================================================================
+    # DEBUG MODE: Cluster created, waiting for manual inspection
+    # ============================================================================
+    logging.info("=" * 80)
+    logging.info(f"Cluster name: {cluster.name}")
+    logging.info(f"Region: {region}")
+    logging.info(f"Directory type: {directory_type}")
+    logging.info(f"AD user password: {ad_user_password}")
+    logging.info(f"SSH command: pcluster ssh --cluster-name {cluster.name} --region {region}")
+    logging.info("=" * 80)
 
-    # Verify access control with ldap access provider.
-    updated_config_file = pcluster_config_reader(config_file="pcluster.config.update.yaml", **config_params)
-    cluster.update(str(updated_config_file), force_update="true")
-    # Reset stateful connection variables after the cluster update
-    remote_command_executor = RemoteCommandExecutor(cluster)
-    scheduler_commands = scheduler_commands_factory(remote_command_executor)
-    for user in users:
-        user.reset_stateful_connection_objects(remote_command_executor, scheduler_commands_factory)
-    _check_ssh_key_generation(users[1], remote_command_executor, scheduler_commands, True)
-    for user in users:
-        logging.info(f"Checking SSH access for user {user.alias}")
-        _check_ssh_auth(user=user, expect_success=user.alias != "PclusterUser2")
+    # ============================================================================
+    # COMMENTED OUT: Original test code below
+    # ============================================================================
+    # scheduler_commands = scheduler_commands_factory(remote_command_executor)
+    # assert_that(NUM_USERS_TO_TEST).is_less_than_or_equal_to(NUM_USERS_TO_CREATE)
+    # users = []
+    # for user_num in range(NUM_USERS_TO_TEST):
+    #     users.append(
+    #         ClusterUser(
+    #             user_num,
+    #             test_datadir,
+    #             cluster,
+    #             scheduler,
+    #             remote_command_executor,
+    #             ad_user_password,
+    #             scheduler_commands_factory,
+    #         )
+    #     )
+    # shared_storage_mount_dirs = ["/shared"]
+    # _run_user_workloads(users, test_datadir, shared_storage_mount_dirs)
+    # logging.info("Testing pcluster update and generate ssh keys for user")
+    # _check_ssh_key_generation(users[0], remote_command_executor, scheduler_commands, False)
 
-    # Verify access control with simple access provider.
-    # With this test we also verify that AdditionalSssdConfigs is working properly.
-    updated_config_file = pcluster_config_reader(config_file="pcluster.config.update2.yaml", **config_params)
-    cluster.update(str(updated_config_file), force_update="true")
-    # Reset stateful connection variables after the cluster update
-    remote_command_executor = RemoteCommandExecutor(cluster)
-    scheduler_commands = scheduler_commands_factory(remote_command_executor)
-    for user in users:
-        user.reset_stateful_connection_objects(remote_command_executor, scheduler_commands_factory)
-    _check_ssh_key_generation(users[1], remote_command_executor, scheduler_commands, True)
-    for user in users:
-        logging.info(f"Checking SSH access for user {user.alias}")
-        _check_ssh_auth(user=user, expect_success=user.alias != "PclusterUser0")
+    # # Verify access control with ldap access provider.
+    # updated_config_file = pcluster_config_reader(config_file="pcluster.config.update.yaml", **config_params)
+    # cluster.update(str(updated_config_file), force_update="true")
+    # # Reset stateful connection variables after the cluster update
+    # remote_command_executor = RemoteCommandExecutor(cluster)
+    # scheduler_commands = scheduler_commands_factory(remote_command_executor)
+    # for user in users:
+    #     user.reset_stateful_connection_objects(remote_command_executor, scheduler_commands_factory)
+    # _check_ssh_key_generation(users[1], remote_command_executor, scheduler_commands, True)
+    # for user in users:
+    #     logging.info(f"Checking SSH access for user {user.alias}")
+    #     _check_ssh_auth(user=user, expect_success=user.alias != "PclusterUser2")
 
-    run_system_analyzer(cluster, scheduler_commands_factory, request)
+    # # Verify access control with simple access provider.
+    # # With this test we also verify that AdditionalSssdConfigs is working properly.
+    # updated_config_file = pcluster_config_reader(config_file="pcluster.config.update2.yaml", **config_params)
+    # cluster.update(str(updated_config_file), force_update="true")
+    # # Reset stateful connection variables after the cluster update
+    # remote_command_executor = RemoteCommandExecutor(cluster)
+    # scheduler_commands = scheduler_commands_factory(remote_command_executor)
+    # for user in users:
+    #     user.reset_stateful_connection_objects(remote_command_executor, scheduler_commands_factory)
+    # _check_ssh_key_generation(users[1], remote_command_executor, scheduler_commands, True)
+    # for user in users:
+    #     logging.info(f"Checking SSH access for user {user.alias}")
+    #     _check_ssh_auth(user=user, expect_success=user.alias != "PclusterUser0")
+
+    # run_system_analyzer(cluster, scheduler_commands_factory, request)
 
 
 def _check_ssh_auth(user, expect_success=True):

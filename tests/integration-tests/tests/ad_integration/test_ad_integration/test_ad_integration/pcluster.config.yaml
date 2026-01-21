@@ -23,8 +23,12 @@ Scheduling:
           - {{ private_subnet_id }}
 SharedStorage:
   - MountDir: /shared
-    Name: ebs
-    StorageType: Ebs
+    Name: pcluster-efs
+    StorageType: Efs
+    EfsSettings:
+      Encrypted: true
+      EncryptionInTransit: true
+      DeletionPolicy: Retain
 DirectoryService:
   DomainName: {{ domain_name }}
   DomainAddr: {{ ldap_uri }}
@@ -32,9 +36,10 @@ DirectoryService:
   DomainReadOnlyUser: {{ domain_read_only_user }}
   LdapTlsCaCert: {{ ldap_tls_ca_cert }}
   LdapTlsReqCert: {{ ldap_tls_req_cert }}
-  GenerateSshKeysForUsers: false
+  GenerateSshKeysForUsers: true
   AdditionalSssdConfigs:
     debug_level: "0x1ff"
+    override_homedir: "/shared/home/%u"
     {% if directory_protocol == "ldap" %}
     ldap_auth_disable_tls_never_use_in_production: True
     {% endif %}
