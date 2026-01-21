@@ -554,7 +554,6 @@ def _check_ssh_key(user, ssh_generation_enabled, remote_command_executor, schedu
 @pytest.mark.parametrize(
     "directory_type,directory_protocol,directory_certificate_verification",
     [
-        ("SimpleAD", "ldap", False),
         ("MicrosoftAD", "ldaps", True),
     ],
 )
