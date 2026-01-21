@@ -26,9 +26,7 @@ SharedStorage:
     Name: pcluster-efs
     StorageType: Efs
     EfsSettings:
-      Encrypted: true
-      EncryptionInTransit: true
-      DeletionPolicy: Retain
+      FileSystemId: fs-08460cec24771cf91
 DirectoryService:
   DomainName: {{ domain_name }}
   DomainAddr: {{ ldap_uri }}
