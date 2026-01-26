@@ -583,7 +583,11 @@ def test_ad_integration(  # noqa: C901
     if not is_directory_supported(region, directory_type):
         pytest.skip(f"Skipping the test because directory type {directory_type} is not supported in region {region}")
 
-    directory_stack_name = "integ-tests-MultiUserInfraStackMicrosoftAD-7xw0hm0oohgqlkbm-homedir"
+    directory_stack_name = directory_factory(
+        request.config.getoption("directory_stack_name"),
+        directory_type,
+        region,
+    )
     directory_stack_outputs = get_infra_stack_outputs(directory_stack_name)
     ad_user_password = get_user_password(directory_stack_outputs.get("UserPasswordSecretArn"))
 
