@@ -14,12 +14,15 @@ HeadNode:
       - BucketName: {{ bucket_name }}
 Scheduling:
   Scheduler: {{ scheduler }}
-  {% if instance == "p6e-gb200.36xlarge" %}
   SlurmSettings:
     CustomSlurmSettings:
       - PrologFlags: "Alloc,NoHold"
       - MessageTimeout: 200
-  {% endif %}
+      - DebugFlags: Agent,Data,Power,Steps
+      - SlurmctldDebug: debug5
+      - SlurmctldSyslogDebug: debug5
+      - SlurmdDebug: debug5
+      - SlurmdSyslogDebug: debug5
   SlurmQueues:
   - Name: {{ queue_with_imex }}
     {% if capacity_block_reservation_id %}
