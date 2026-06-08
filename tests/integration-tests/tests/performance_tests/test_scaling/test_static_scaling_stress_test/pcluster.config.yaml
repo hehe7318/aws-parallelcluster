@@ -24,3 +24,6 @@ Scheduling:
       Networking:
         SubnetIds:
           - {{ private_subnet_id }}
+DevSettings:
+  Timeouts:
+    ComputeInstanceInfoTimeout: 120
