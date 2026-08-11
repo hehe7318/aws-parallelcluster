@@ -117,7 +117,7 @@ def test_efa(
     max_queue_size = 2
     capacity_reservation_id = None
     # p6 family instances need capacity blocks and so placement group is set to false
-    capacity_block_instance_type = instance.startswith("p6")
+    capacity_block_instance_type = instance.startswith("p6") or instance.startswith("p4d")
     placement_group_enabled = not capacity_block_instance_type
     if capacity_block_instance_type:
         capacity_reservations_ids = get_capacity_reservation_id(request, instance, region, max_queue_size, os)
